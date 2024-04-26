@@ -19,11 +19,11 @@ mongoose.connect('mongodb://localhost:27017/university_system', {
     try {
       // Insert sample data here
       await Student.create([
-        { firstName: 'John', 
-        lastName: 'Doe', 
-        email: 'john@example.com', 
-        phoneNumber: '1234567890',
-        registrationNumber: '12345' }
+        { firstName: 'Johnny', 
+        lastName: 'Mark', 
+        email: 'johnny@example.com', 
+        phoneNumber: '01234567890',
+        registrationNumber: '12346' }
       ]);
     } catch (error) {
       console.error('Error inserting sample data:', error);
