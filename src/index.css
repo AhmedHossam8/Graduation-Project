@@ -11,3 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.bg-body-tertiary {
+  background-color: #1943a1 !important;
+}
+
+.dropdown-toggle {
+  color: white;
+}
