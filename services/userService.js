@@ -1,24 +1,29 @@
+require('dotenv').config();
+
 // Import necessary modules and models
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../models/userModel');
+const User = require('../models/user');
 
 // Define userService functions
 const userService = {
     // Function to register a new user
     registerUser: async (userData) => {
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(userData.password, 10);
+        try {
+            // Hash the password
+            const hashedPassword = await bcrypt.hash(userData.password, 10);
 
-        // Create a new user instance
-        const newUser = new User({
-            username: userData.username,
-            email: userData.email,
-            password: hashedPassword
-        });
+            userData.password = hashedPassword;
+            // Save the user to the database
+            await userData.save();
 
-        // Save the user to the database
-        return await newUser.save();
+            const token = jwt.sign({ _id: userData._id, email: userData.email }, process.env.JWT_SECRET, { expiresIn: '4h' });
+            
+            return { userData, token };
+
+        } catch (e) {
+            console.log(e);
+        }
     },
 
     // Function to authenticate a user

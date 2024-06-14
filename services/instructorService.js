@@ -6,6 +6,7 @@ const instructorService = {
     // Function to create a new instructor
     createInstructor: async (instructorData) => {
         // Create a new instructor instance
+        instructorData.role = "Instructor"
         const newInstructor = new Instructor(instructorData);
 
         // Save the instructor to the database

@@ -20,10 +20,6 @@ const courseSchema = new mongoose.Schema({
   credits: {
     type: Number,
     required: true
-  },
-  instructor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Instructor' // Reference to the Instructor model
   }
 });
 

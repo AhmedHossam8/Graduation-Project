@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const enrollmentSchema = new mongoose.Schema({
   studentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Student' // Reference to the Student model
+    ref: 'User' // Reference to the Student model
   },
   courseId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -15,8 +15,7 @@ const enrollmentSchema = new mongoose.Schema({
   enrollmentDate: {
     type: Date,
     default: Date.now
-  },
-  grade: String // You may want to store grades separately in a Grade model
+  }
 });
 
 // Create model from schema

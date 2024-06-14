@@ -1,8 +1,11 @@
+require('dotenv').config();
+
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const userService = require('../services/userService')
 
 // Register a new user
 router.post('/register', async (req, res) => {
@@ -13,22 +16,24 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ error: 'Email already registered' });
         }
 
-        // Hash the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-        // Create a new user
-        const newUser = new User({
+         // Create a new user
+        const obj = await userService.registerUser(new User({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
             email: req.body.email,
-            password: hashedPassword
-        });
-        const savedUser = await newUser.save();
+            phoneNumber: req.body.phoneNumber,
+            registrationNumber: req.body.registrationNumber,
+            password: req.body.password, // Store the hashed password
+            role: req.body.role
+        }))
 
-        // Generate and return a JWT token
-        const token = jwt.sign({ _id: savedUser._id }, process.env.JWT_SECRET);
-        res.header('auth-token', token).json({ token });
+        const token = obj.token;
+        
+        // Send a success response
+        res.status(201).json({ message: 'User registered successfully', token: token });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
+        console.log(error);
     }
 });
 
@@ -36,22 +41,15 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         // Check if the email exists
-        const user = await User.findOne({ email: req.body.email });
-        if (!user) {
-            return res.status(400).json({ error: 'Email or password is incorrect' });
-        }
+        const obj = await userService.authenticateUser(req.body.email, req.body.password);
 
-        // Check if the password is correct
-        const validPassword = await bcrypt.compare(req.body.password, user.password);
-        if (!validPassword) {
-            return res.status(400).json({ error: 'Email or password is incorrect' });
-        }
+        const token = obj.token;
+        const user = obj.user;
 
-        // Generate and return a JWT token
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
         res.header('auth-token', token).json({ token });
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
+        console.log(error);
     }
 });
 

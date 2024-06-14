@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Student = require('../models/student');
+const Student = require('../models/user');
 
 // Search for students by registration number
 router.get('/students', async (req, res) => {

@@ -3,7 +3,7 @@ const router = express.Router();
 const Grade = require('../models/grade');
 
 // Get all grades
-router.get('/', async (req, res) => {
+router.get('/list-grades', async (req, res) => {
     try {
         const grades = await Grade.find();
         res.json(grades);
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Add new grade
-router.post('/', async (req, res) => {
+router.post('/add/', async (req, res) => {
     try {
         const newGrade = new Grade(req.body);
         const savedGrade = await newGrade.save();
@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
 });
 
 // Update grade by ID
-router.put('/:id', async (req, res) => {
+router.put('/update/:id', async (req, res) => {
     try {
         const updatedGrade = await Grade.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedGrade) {
@@ -50,7 +50,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete grade by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
     try {
         const deletedGrade = await Grade.findByIdAndDelete(req.params.id);
         if (!deletedGrade) {

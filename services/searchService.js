@@ -1,7 +1,7 @@
 // Import necessary modules and models
-const Student = require('../models/studentModel');
+const Student = require('../models/user');
 const Course = require('../models/courseModel');
-const Instructor = require('../models/instructorModel');
+const Instructor = require('../models/user');
 
 // Define searchService functions
 const searchService = {

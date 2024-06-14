@@ -11,9 +11,8 @@ const departmentSchema = new mongoose.Schema({
   },
   headOfDepartment: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Instructor' // Reference to the Instructor model
+    ref: 'User' // Reference to the Instructor model
   },
-  location: String,
   coursesOffered: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Course' // Reference to the Course model

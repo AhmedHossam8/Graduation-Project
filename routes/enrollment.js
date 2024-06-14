@@ -3,7 +3,7 @@ const router = express.Router();
 const Enrollment = require('../models/enrollment');
 
 // Get all enrollments
-router.get('/', async (req, res) => {
+router.get('/all-enrollments', async (req, res) => {
     try {
         const enrollments = await Enrollment.find();
         res.json(enrollments);
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get enrollment by ID
-router.get('/:id', async (req, res) => {
+router.get('/enrollment/:id', async (req, res) => {
     try {
         const enrollment = await Enrollment.findById(req.params.id);
         if (!enrollment) {
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Add new enrollment
-router.post('/', async (req, res) => {
+router.post('/add', async (req, res) => {
     try {
         const newEnrollment = new Enrollment(req.body);
         const savedEnrollment = await newEnrollment.save();
@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
 });
 
 // Update enrollment by ID
-router.put('/:id', async (req, res) => {
+router.put('/update/:id', async (req, res) => {
     try {
         const updatedEnrollment = await Enrollment.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedEnrollment) {
@@ -50,7 +50,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete enrollment by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
     try {
         const deletedEnrollment = await Enrollment.findByIdAndDelete(req.params.id);
         if (!deletedEnrollment) {

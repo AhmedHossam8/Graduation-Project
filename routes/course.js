@@ -3,7 +3,7 @@ const router = express.Router();
 const Course = require('../models/course');
 
 // Get all courses
-router.get('/', async (req, res) => {
+router.get('/search', async (req, res) => {
     try {
         const courses = await Course.find();
         res.json(courses);
@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 });
 
 // Get course by ID
-router.get('/:id', async (req, res) => {
+router.get('/search/:id', async (req, res) => {
     try {
         const course = await Course.findById(req.params.id);
         if (!course) {
@@ -26,7 +26,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Add new course
-router.post('/', async (req, res) => {
+router.post('/add', async (req, res) => {
     try {
         const newCourse = new Course(req.body);
         const savedCourse = await newCourse.save();
@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
 });
 
 // Update course by ID
-router.put('/:id', async (req, res) => {
+router.put('/update/:id', async (req, res) => {
     try {
         const updatedCourse = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!updatedCourse) {
@@ -50,7 +50,7 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete course by ID
-router.delete('/:id', async (req, res) => {
+router.delete('/delete/:id', async (req, res) => {
     try {
         const deletedCourse = await Course.findByIdAndDelete(req.params.id);
         if (!deletedCourse) {
