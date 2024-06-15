@@ -9,46 +9,6 @@ async function getDeployerAddress() {
     return accounts[0]; // Use the first address as deployer address
 }
 
-// Function to connect MongoDB
-import { MongoClient } from 'mongodb';
-async function connectToMongo() {
-    const uri = 'mongodb://localhost:27017/';
-    const client = new MongoClient(uri, { useUnifiedTopology: true });
-    try {
-        await client.connect();
-        console.log('Connected to MongoDB');
-
-        // Perform Database Operations
-        // Function to insert sample data
-        async function insertSampleData() {
-            try {
-                // Insert sample data here
-                await Student.create([
-                    {
-                        firstName: 'Johnny',
-                        lastName: 'Mark',
-                        email: 'johnny@example.com',
-                        phoneNumber: '01234567890',
-                        registrationNumber: '12346'
-                    }
-                ]);
-            } catch (error) {
-                console.error('Error inserting sample data:', error);
-            } finally {
-                // Close connection after insertion
-                mongoose.connection.close();
-            }
-        }
-    }
-    catch (error) {
-        console.log('Failed to Connect to MongoDB', error);
-    }
-    finally {
-        await client.close();
-    }
-}
-connectToMongo();
-
 // Function to deploy a contract
 async function deployContract(contractData, constructorArgs) {
     try {

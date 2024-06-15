@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-// const { web3, deployContract } = require('utils');
+require('dotenv').config(); // Load environment variables
+const Web3 = require('web3');
 
 // Import route files
 const userRoutes = require('./routes/user');
@@ -40,20 +41,8 @@ mongoose.connect(MONGODB_URI, {
   console.error('Error connecting to MongoDB:', err.message);
 });
 
-// Deploy Smart Contract
-// const contractData = require('./path/to/compiled-contract.json'); // Load compiled contract data
-// const constructorArgs = ['constructorArg1', 'constructorArg2']; // If your contract has constructor arguments
-// const deployerAddress = '0x123...'; // Deployer address
-// const contractAddress = deployContract(contractData, constructorArgs, deployerAddress); // Deploy contract and get contract address
-
-// Example: Get the latest block number
-// web3.eth.getBlockNumber()
-//     .then(blockNumber => {
-//         console.log('Latest block number:', blockNumber);
-//     })
-//     .catch(error => {
-//         console.error('Error getting block number:', error);
-//     });
+// Connect to Ganache
+const web3 = new Web3(new Web3.providers.HttpProvider(process.env.GANACHE_URL));
 
 // Start server
 app.listen(PORT, () => {
