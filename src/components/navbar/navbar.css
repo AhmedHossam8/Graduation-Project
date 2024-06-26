@@ -1,0 +1,26 @@
+.navbar {
+  text-align: center;
+  color: white;
+  background-color: #003366;
+}
+
+.title {
+  cursor: pointer;
+}
+
+h4 {
+  color: white;
+  text-decoration: none !important;
+}
+
+.contents {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 50px;
+  gap: 20px;
+}
+
+.sub-text {
+  margin-top: 10px;
+}
