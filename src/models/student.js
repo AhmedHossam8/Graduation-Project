@@ -3,7 +3,7 @@
 const mongoose = require('mongoose');
 
 // Define student schema
-const userSchema = new mongoose.Schema({
+const studentSchema = new mongoose.Schema({
   registrationNumber: {
     type: String,
     required: true,
@@ -34,18 +34,17 @@ const userSchema = new mongoose.Schema({
     courseCode: String,
     grade: String
   }],
-  role: {
-    type: String,
-    enum: ['student', 'instructor', 'teaching assistant', 'manager'],
-    required: true
-  },
   department: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Department' // Reference to the Department model
+    ref: 'Department'
+  },
+  term: {
+    type: Number,
+    required: true
   }
 });
 
 // Create model from schema
-const User = mongoose.model('users', userSchema);
+const Student = mongoose.model('students', studentSchema);
 
-module.exports = User;
+module.exports = Student;

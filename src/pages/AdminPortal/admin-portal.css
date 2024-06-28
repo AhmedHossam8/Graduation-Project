@@ -1,0 +1,29 @@
+body {
+    background-color: #D9E0E7;
+}
+
+.card-page {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    justify-content: center;
+    margin-top: 200px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.card {
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.card-image {
+    width: 100%;
+    height: auto;
+}
+
+.card-title {
+    padding: 8px;
+    font-size: 16px;
+}

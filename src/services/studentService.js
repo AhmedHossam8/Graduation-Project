@@ -1,51 +1,66 @@
-// Import necessary modules and models
-const Student = require('../models/studentModel');
+require('dotenv').config();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Student = require('../models/student');
 
-// Define studentService functions
 const studentService = {
-    // Function to enroll a student in a course
-    enrollStudentInCourse: async (studentId, courseId) => {
-        // Fetch the student from the database
-        const student = await Student.findById(studentId);
+    registerStudent: async (studentData) => {
+        try {
+            const hashedPassword = await bcrypt.hash(studentData.password, 10);
+            studentData.password = hashedPassword;
+            await studentData.save();
+            const token = jwt.sign({ _id: studentData._id, email: studentData.email }, process.env.JWT_SECRET, { expiresIn: '4h' });
+            return { studentData, token };
+        } catch (e) {
+            console.log(e);
+        }
+    },
 
-        // Check if the student is already enrolled in the course
+    authenticateStudent: async (registrationNumber, password) => {
+        const student = await Student.findOne({ registrationNumber });
+        if (!student || !(await bcrypt.compare(password, student.password))) {
+            return null;
+        }
+        const token = jwt.sign({ userId: student._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return { student, token };
+    },
+
+    getStudentByRegistrationNumber: async (registrationNumber) => {
+        return await Student.findOne({ registrationNumber });
+    },
+
+    updateStudentProfile: async (registrationNumber, updatedStudentData) => {
+        return await Student.findOneAndUpdate({ registrationNumber }, updatedStudentData, { new: true });
+    },
+
+    enrollStudentInCourse: async (registrationNumber, courseId) => {
+        const student = await Student.findOne({ registrationNumber });
+        if (!student) {
+            throw new Error('Student not found');
+        }
         if (student.courses.includes(courseId)) {
             throw new Error('Student is already enrolled in the course');
         }
-
-        // Add the course to the student's list of enrolled courses
         student.courses.push(courseId);
-
-        // Save the updated student data to the database
         return await student.save();
     },
 
-    // Function to drop a student from a course
-    dropStudentFromCourse: async (studentId, courseId) => {
-        // Fetch the student from the database
-        const student = await Student.findById(studentId);
-
-        // Check if the student is enrolled in the course
+    dropStudentFromCourse: async (registrationNumber, courseId) => {
+        const student = await Student.findOne({ registrationNumber });
+        if (!student) {
+            throw new Error('Student not found');
+        }
         if (!student.courses.includes(courseId)) {
             throw new Error('Student is not enrolled in the course');
         }
-
-        // Remove the course from the student's list of enrolled courses
         student.courses = student.courses.filter(id => id !== courseId);
-
-        // Save the updated student data to the database
         return await student.save();
     },
 
-    // Function to get courses enrolled by a student
-    getCoursesEnrolledByStudent: async (studentId) => {
-        // Fetch the student from the database
-        const student = await Student.findById(studentId).populate('courses');
-
-        // Return the list of enrolled courses
+    getCoursesEnrolledByStudent: async (registrationNumber) => {
+        const student = await Student.findOne({ registrationNumber }).populate('courses');
         return student.courses;
     }
 };
 
-// Export studentService
 module.exports = studentService;

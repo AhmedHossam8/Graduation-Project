@@ -2,7 +2,7 @@ import React from 'react';
 import './guests.css';
 import Navbar from '../../components/navbar/Navbar';
 import Wallpaper from '../../assets/HomePage_image.png';
-import LoginButton from '../../components/Login_Button/LoginButton';
+import LoginButton from '../../components/LoginButton/LoginButton';
 
 const Guests = () => {
     return (

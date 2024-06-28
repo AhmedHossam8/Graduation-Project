@@ -1,9 +1,9 @@
 import React from 'react';
 import './login-button.css';
 
-const LoginButton = ({ onClick }) => {
+const LoginButton = ({ handleClick }) => {
     return (
-        <button className={`custom-button`} onClick={onClick}>
+        <button className={`custom-button`} onClick={handleClick}>
             Login
         </button>
     );

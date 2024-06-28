@@ -1,33 +1,38 @@
-// Import necessary modules and models
-const Instructor = require('../models/instructorModel');
+require('dotenv').config();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const Instructor = require('../models/instructor');
 
-// Define instructorService functions
 const instructorService = {
-    // Function to create a new instructor
-    createInstructor: async (instructorData) => {
-        // Create a new instructor instance
-        instructorData.role = "Instructor"
-        const newInstructor = new Instructor(instructorData);
-
-        // Save the instructor to the database
-        return await newInstructor.save();
+    registerInstructor: async (instructorData) => {
+        try {
+            const hashedPassword = await bcrypt.hash(instructorData.password, 10);
+            instructorData.password = hashedPassword;
+            await instructorData.save();
+            const token = jwt.sign({ _id: instructorData._id, email: instructorData.email }, process.env.JWT_SECRET, { expiresIn: '4h' });
+            return { instructor: instructorData, token };
+        } catch (e) {
+            console.log(e);
+            throw e;
+        }
     },
 
-    // Function to retrieve an instructor by ID
+    authenticateInstructor: async (id, password) => {
+        const instructor = await Instructor.findOne({ id });
+        if (!instructor || !(await bcrypt.compare(password, instructor.password))) {
+            return null;
+        }
+        const token = jwt.sign({ userId: instructor._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        return { instructor, token };
+    },
+
     getInstructorById: async (instructorId) => {
         return await Instructor.findById(instructorId);
     },
 
-    // Function to update instructor information
-    updateInstructor: async (instructorId, updatedInstructorData) => {
+    updateInstructorProfile: async (instructorId, updatedInstructorData) => {
         return await Instructor.findByIdAndUpdate(instructorId, updatedInstructorData, { new: true });
-    },
-
-    // Function to delete an instructor
-    deleteInstructor: async (instructorId) => {
-        return await Instructor.findByIdAndDelete(instructorId);
     }
 };
 
-// Export instructorService
 module.exports = instructorService;

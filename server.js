@@ -1,33 +1,37 @@
 const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config(); // Load environment variables
-const Web3 = require('web3');
+// const Web3 = require('web3');
 
 // Import route files
-const userRoutes = require('./routes/user');
-const departmentRoutes = require('./routes/department');
-const courseRoutes = require('./routes/course');
-const enrollmentRoutes = require('./routes/enrollment');
-const gradeRoutes = require('./routes/grade');
-const searchRoutes = require('./routes/search');
-const authRoutes = require('./routes/auth');
-const statusRoute = require('./routes/status')
-
+const studentRoutes = require('./src/routes/student');
+const instructorRoutes = require('./src/routes/instructor')
+const departmentRoutes = require('./src/routes/department');
+const courseRoutes = require('./src/routes/course');
+const enrollmentRoutes = require('./src/routes/enrollment');
+const gradeRoutes = require('./src/routes/grade');
+const searchRoutes = require('./src/routes/search');
+const studentAuthRoutes = require('./src/routes/studentAuth');
+const instructorAuthRoutes = require('./src/routes/instructorAuth');
+const statusRoute = require('./src/routes/status')
+const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json()); // Parse JSON requests
-
+app.use(cors());
 // Routes
 // Use route files
-app.use('/user', userRoutes);
+app.use('/student', studentRoutes);
+app.use('/instructor', instructorRoutes);
 app.use('/department', departmentRoutes);
 app.use('/course', courseRoutes);
 app.use('/enrollment', enrollmentRoutes);
 app.use('/grade', gradeRoutes);
 app.use('/search', searchRoutes);
-app.use('/auth', authRoutes);
+app.use('/student-auth', studentAuthRoutes);
+app.use('/instructor-auth', instructorAuthRoutes);
 app.use('', statusRoute)
 
 // Connect to MongoDB
@@ -42,7 +46,7 @@ mongoose.connect(MONGODB_URI, {
 });
 
 // Connect to Ganache
-const web3 = new Web3(new Web3.providers.HttpProvider(process.env.GANACHE_URL));
+// const web3 = new Web3(new Web3.providers.HttpProvider(process.env.GANACHE_URL));
 
 // Start server
 app.listen(PORT, () => {

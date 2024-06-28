@@ -6,10 +6,10 @@ const LoginMenu = () => {
     return (
         <div className="menu">
             <h3 style={{ color: '#002244' }}>Login as</h3>
-            <Link to="/student-portal">
+            <Link to="/student-login">
                 <button className="button" >Student</button>
             </Link>
-            <Link to="/staff-portal">
+            <Link to="/staff-login">
             <button className="button">Staff</button>
             </Link>
             <Link to="/guests">

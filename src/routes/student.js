@@ -1,44 +1,44 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/user');
+const Student = require('../models/student');
 
-// Get all users
-router.get('/users', async (req, res) => {
+// Get all student
+router.get('/student', async (req, res) => {
     try {
-        const users = await User.find();
-        res.json(users);
+        const student = await Student.find();
+        res.json(student);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-// Get User by ID
-router.get('/:id', async (req, res) => {
+// Get student by ID
+router.get('/:registerationNumber', async (req, res) => {
     try {
-        const user = await User.findById(req.params.id);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
+        const student = await Student.findById(req.params.id);
+        if (!student) {
+            return res.status(404).json({ error: 'student not found' });
         }
-        res.json(user);
+        res.json(student);
     } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
-// Update User by ID
+// Update student by Reg Number
 router.put('/update/:id', async (req, res) => {
     try {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        if (!updatedUser) {
-            return res.status(404).json({ error: 'User not found' });
+        const updatedStudent = await Student.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!updatedStudent) {
+            return res.status(404).json({ error: 'Student not found' });
         }
-        res.json(updatedUser);
+        res.json(updatedStudent);
     } catch (error) {
         res.status(400).json({ error: 'Invalid data' });
     }
 });
 
-// Delete User by ID
+// Delete Student by Reg Number
 router.delete('/delete/:id', async (req, res) => {
     try {
         const deletedUser = await User.findByIdAndDelete(req.params.id);
