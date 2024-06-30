@@ -15,7 +15,7 @@ router.post('/register', async (req, res) => {
         }
 
         const { instructor, token } = await instructorService.registerInstructor(new Instructor({
-            id: req.body.id,
+            instructorId: req.body.instructorId,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             email: req.body.email,

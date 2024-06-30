@@ -32,6 +32,9 @@ const studentSchema = new mongoose.Schema({
   },
   courses: [{
     courseCode: String,
+    courseTitle: String,
+    Instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'Instructor' },
+    courseCredits: Number,
     grade: String
   }],
   department: {

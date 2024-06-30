@@ -1,33 +1,27 @@
 import React from 'react';
-import './course.css';
+import './instructor-course.css';
 import ActionCard from '../../components/Cards/Card';
 import Navbar from '../../components/SecNavbar/SecNavbar';
 import CourseImage from '../../assets/Course.jpeg';
 import Withdraw from '../../assets/withdraw.jpeg';
 
-const StudentCourse = '/student-courses-details'
-const RegisterCourse = '/register-course'
-const WithdrawCourse = '/student-courses'
+const InstructorCourse = '/instructor-courses-details'
+const WithdrawCourse = '/instructor-withdraw'
 
 const cardData = [
     {
-        title: 'Student Courses',
+        title: 'Courses',
         img: CourseImage,
-        path: StudentCourse
+        path: InstructorCourse
     },
     {
-        title: 'Register Course',
-        img: CourseImage,
-        path: RegisterCourse
-    },
-    {
-        title: 'Request Withdraw',
+        title: 'Withdraw Student',
         img: Withdraw,
         path: WithdrawCourse
     }
 ];
 
-const StaffPortal = () => (
+const InstructorCourseDetails = () => (
     <div>
         <Navbar />
         <div className="card-page">
@@ -38,4 +32,4 @@ const StaffPortal = () => (
     </div>
 );
 
-export default StaffPortal;
+export default InstructorCourseDetails;

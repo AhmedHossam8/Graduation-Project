@@ -12,6 +12,19 @@ router.get('/search', async (req, res) => {
     }
 });
 
+// Route to fetch courses not enrolled by the student
+router.get('/courses/not-enrolled/:registrationNumber', async (req, res) => {
+    try {
+        const { registrationNumber } = req.params;
+        console.log('Fetching courses not enrolled for registrationNumber:', registrationNumber);
+        const courses = await courseService.getCoursesNotEnrolledByStudent(registrationNumber);
+        res.json(courses);
+    } catch (error) {
+        console.error('Error in fetching courses not enrolled:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 // Get course by ID
 router.get('/search/:id', async (req, res) => {
     try {
@@ -32,6 +45,7 @@ router.post('/add', async (req, res) => {
         const savedCourse = await newCourse.save();
         res.status(201).json(savedCourse);
     } catch (error) {
+        console.log(error);
         res.status(400).json({ error: 'Invalid data' });
     }
 });

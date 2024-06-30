@@ -2,22 +2,21 @@ import React from 'react';
 import './instructor-portal.css';
 import ActionCard from '../../components/Cards/Card';
 import Navbar from '../../components/SecNavbar/SecNavbar';
-import ResultImage from '../../assets/Results.jpeg';
 import WalletImage from '../../assets/wallet.png';
 import CourseImage from '../../assets/Course.jpeg';
 
+const InstructorCourse = '/instructor-courses';
+
 const cardData = [
     {
-        title: 'Submit Results',
-        img: ResultImage
-    },
-    {
         title: 'Courses',
-        img: CourseImage
+        img: CourseImage,
+        path: InstructorCourse
     },
     {
         title: 'Digital Wallet',
-        img: WalletImage
+        img: WalletImage,
+        path: null
     }
 ];
 
@@ -26,7 +25,7 @@ const InstructorPortal = () => (
         <Navbar />
         <div className="card-page">
             {cardData.map((card, index) => (
-                <ActionCard key={index} title={card.title} img={card.img} />
+                <ActionCard key={index} title={card.title} img={card.img} path={card.path} />
             ))}
         </div>
     </div>

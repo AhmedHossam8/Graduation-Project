@@ -18,7 +18,9 @@ const InstructorLogin = () => {
 
     useEffect(() => {
         if (result.isSuccess) {
-            navigate('/admin-portal');
+            // Save the entire instructor object in local storage
+            localStorage.setItem("instructor", JSON.stringify(result.data));
+            navigate('/instructor-portal');
         }
         if (result.isError) {
             console.error('Login failed:', result.error);
@@ -42,7 +44,7 @@ const InstructorLogin = () => {
                     className='text-field'
                     placeholder='ID Number'
                     required
-                    onChange={(e) => setInstructor({ ...instructor, id: e.target.value })}
+                    onChange={(e) => setInstructor({ ...instructor, instructorId: e.target.value })}
                 />
                 <input
                     type='password'

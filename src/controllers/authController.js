@@ -14,20 +14,20 @@ const authController = {
         }
 
         // Extract registration data from request body
-        const { registerationNumber, password } = req.body;
+        const { registrationNumber, password } = req.body;
 
         try {
             // Check if student already exists
-            const existingStudent = await authService.getStudentByRegisteration(registerationNumber);
+            const existingStudent = await authService.getStudentByRegistration(registrationNumber);
             if (existingStudent) {
-                return res.status(400).json({ message: 'Student with this registeration already exists' });
+                return res.status(400).json({ message: 'Student with this registration already exists' });
             }
 
             // Hash the password
             const hashedPassword = await bcrypt.hash(password, 10);
 
             // Create new student
-            const newStudent = await authService.createStudent({ registerationNumber, email, password: hashedPassword });
+            const newStudent = await authService.createStudent({ registrationNumber, email, password: hashedPassword });
 
             // Generate JWT token
             const token = jwt.sign({ studentId: newStudent._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -48,11 +48,11 @@ const authController = {
         }
 
         // Extract login data from request body
-        const { registerationNumber, password } = req.body;
+        const { registrationNumber, password } = req.body;
 
         try {
             // Check if student exists
-            const student = await authService.getStudentByRegisteration(registerationNumber);
+            const student = await authService.getStudentByRegistration(registrationNumber);
             if (!student) {
                 return res.status(401).json({ message: 'Invalid credentials' });
             }

@@ -1,5 +1,3 @@
-// models/course.js
-
 const mongoose = require('mongoose');
 
 // Define course schema
@@ -13,13 +11,18 @@ const courseSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  description: {
-    type: String,
-    required: true
-  },
   credits: {
     type: Number,
     required: true
+  },
+  department: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'departments'
+  },
+  instructor: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'instructors', 
+    required: true 
   }
 });
 

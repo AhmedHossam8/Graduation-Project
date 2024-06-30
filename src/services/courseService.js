@@ -1,37 +1,49 @@
-// Import necessary modules and models
-const Course = require('../models/courseModel');
+const Course = require('../models/course');
 
-// Define courseService functions
 const courseService = {
-    // Function to create a new course
     createCourse: async (courseData) => {
-        // Create a new course instance
         const newCourse = new Course(courseData);
-
-        // Save the course to the database
         return await newCourse.save();
     },
 
-    // Function to retrieve a course by ID
     getCourseById: async (courseId) => {
         return await Course.findById(courseId);
     },
 
-    // Function to update course information
     updateCourse: async (courseId, updatedCourseData) => {
         return await Course.findByIdAndUpdate(courseId, updatedCourseData, { new: true });
     },
 
-    // Function to delete a course
     deleteCourse: async (courseId) => {
         return await Course.findByIdAndDelete(courseId);
     },
 
-    // Function to get all courses
     getAllCourses: async () => {
         return await Course.find();
-    }
+    },
+
+    getCoursesNotEnrolledByStudent: async (registrationNumber) => {
+        try {
+            // Find the student by registration number
+            const student = await Student.findOne({ registrationNumber });
+            if (!student) {
+                throw new Error('Student not found');
+            }
+
+            // Get all courses
+            const allCourses = await Course.find();
+
+            // Filter courses that the student is already enrolled in
+            const coursesNotEnrolled = allCourses.filter(course => {
+                return !student.courses.some(sCourse => sCourse.courseCode === course.courseCode);
+            });
+
+            return coursesNotEnrolled;
+        } catch (error) {
+            console.error('Error in getCoursesNotEnrolledByStudent:', error);
+            throw error;
+        }
+    },
 };
 
-// Export courseService
 module.exports = courseService;

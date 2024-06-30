@@ -17,6 +17,7 @@ export const apiSlice = createApi({
         body: payload,
       }),
     }),
+
     instructorLogin: builder.mutation({
       query: (payload) => ({
         url: `/instructor-auth/login`,
@@ -24,7 +25,55 @@ export const apiSlice = createApi({
         body: payload,
       }),
     }),
-  }),
-})
 
-export const { useStudentLoginMutation, useInstructorLoginMutation } = apiSlice;
+    getCourses: builder.query({
+      query: () => ({
+        url: `/course/search`,
+        method: 'GET',
+      }),
+    }),
+
+    enrollStudentInCourse: builder.mutation({
+      query: ({ registrationNumber, course }) => ({
+        url: `/student/enroll`,
+        method: 'POST',
+        body: {
+          registrationNumber,
+          course
+        }
+      }),
+    }),
+
+    getCoursesEnrolledByStudent: builder.query({
+      query: (registrationNumber) => ({
+        url: `/student/courses/${registrationNumber}`,
+        method: 'GET',
+      }),
+    }),
+
+    getCoursesByInstructorId: builder.query({
+      query: (id) => ({
+        url: `/instructor/courses/${id}`,
+        method: 'GET',
+      }),
+    }),
+
+    // New endpoint for fetching students by instructor ID
+    getStudentsByInstructorId: builder.query({
+      query: (instructorId) => ({
+        url: `/instructor/students/${instructorId}`,
+        method: 'GET',
+      }),
+    }),
+  }),
+});
+
+export const {
+  useStudentLoginMutation,
+  useInstructorLoginMutation,
+  useGetCoursesQuery,
+  useEnrollStudentInCourseMutation,
+  useGetCoursesEnrolledByStudentQuery,
+  useGetCoursesByInstructorIdQuery,
+  useGetStudentsByInstructorIdQuery,
+} = apiSlice;

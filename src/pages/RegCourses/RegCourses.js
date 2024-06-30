@@ -1,63 +1,120 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Box from '@mui/material/Box';
+import React, { useEffect, useState } from 'react';
+import { useGetCoursesQuery, useEnrollStudentInCourseMutation } from '../../redux/features/apiSlice';
+import ActionAreaCard from '../../components/SecCard/SecCard';
+import './reg-courses.css';
+import Navbar from '../../components/SecNavbar/SecNavbar';
 
-function CustomTabPanel(props) {
-  const { children, value, index, ...other } = props;
+const CoursesList = () => {
+  const [studentRegistration, setStudentRegistration] = useState(null);
+  const { data: coursesData, error, isLoading } = useGetCoursesQuery();
+  const [courses, setCourses] = useState([]);
+  const [selectedCourses, setSelectedCourses] = useState([]);
+  const [enrollStudentInCourse, { isSuccess, isError, error: enrollError }] = useEnrollStudentInCourseMutation();
+
+  useEffect(() => {
+    const storedStudentRegistration = localStorage.getItem("user");
+    setStudentRegistration(storedStudentRegistration);
+  }, []);
+
+  useEffect(() => {
+    if (coursesData) {
+      const initialCourses = coursesData.map(course => ({
+        ...course,
+        selected: false
+      }));
+      setCourses(initialCourses);
+    }
+  }, [coursesData]);
+
+  useEffect(() => {
+    const storedSelectedCourses = JSON.parse(localStorage.getItem('selectedCourses')) || [];
+    setSelectedCourses(storedSelectedCourses);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('selectedCourses', JSON.stringify(selectedCourses));
+  }, [selectedCourses]);
+
+  const handleCardClick = (clickedCourse) => {
+    const updatedCourses = courses.map(course =>
+      course.courseCode === clickedCourse.courseCode
+        ? { ...course, selected: !course.selected }
+        : course
+    );
+    setCourses(updatedCourses);
+    setSelectedCourses(updatedCourses.filter(course => course.selected));
+  };
+
+  const handleConfirmEnrollment = async () => {
+    if (!studentRegistration) {
+      console.error("No student registration number found in local storage.");
+      return;
+    }
+
+    const coursesToEnroll = courses.filter(course => course.selected);
+    try {
+      const enrollments = await Promise.all(
+        coursesToEnroll.map(course =>
+          enrollStudentInCourse({
+            registrationNumber: studentRegistration,
+            course: {...course}
+          }).unwrap()
+        )
+      );
+      console.log('Enrollment results:', enrollments);
+
+      const newSelectedCourses = [...selectedCourses, ...coursesToEnroll];
+      setSelectedCourses(newSelectedCourses);
+
+      const updatedCourses = courses.map(course => ({ ...course, selected: false }));
+      setCourses(updatedCourses);
+    } catch (err) {
+      console.error('Failed to enroll in course:', err);
+      if (err?.data?.error) {
+        console.error('Error message:', err.data.error);
+      }
+    }
+  };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error fetching courses: {error.message}</p>;
+  }
 
   return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    <div>
+      <Navbar />
+      <div className="courses-list-container">
+        <div className="courses-list">
+          {courses.map((course) => (
+            <div
+              key={course.courseCode}
+              onClick={() => handleCardClick(course)}
+            >
+              <ActionAreaCard
+                name={course.title}
+                code={course.courseCode}
+                credits={course.credits}
+                isCourseSelected={course.selected}
+              />
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: "20px"}}>
+          {isSuccess && <p style={{color: "green"}}>Courses updated successfully!</p>}
+          {isError && <p style={{color: "red" }}>Failed to update courses. {enrollError?.data?.error ?? 'Unknown error'}</p>}
+        </div>
+        <div className="button-container">
+          <button onClick={handleConfirmEnrollment} disabled={courses.filter(course => course.selected).length === 0} className='confirm-btn'>
+            Confirm Enrollment
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
-
-CustomTabPanel.propTypes = {
-  children: PropTypes.node,
-  index: PropTypes.number.isRequired,
-  value: PropTypes.number.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
-
-export default function BasicTabs() {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  return (
-    <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-          <Tab label="Item One" {...a11yProps(0)} />
-          <Tab label="Item Two" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
-        </Tabs>
-      </Box>
-      <CustomTabPanel value={value} index={0}>
-        Item One
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        Item Two
-      </CustomTabPanel>
-      <CustomTabPanel value={value} index={2}>
-        Item Three
-      </CustomTabPanel>
-    </Box>
-  );
-}
+export default CoursesList;

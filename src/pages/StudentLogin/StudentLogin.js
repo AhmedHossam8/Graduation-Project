@@ -18,13 +18,14 @@ const StudentLogin = () => {
 
     useEffect(() => {
         if (result.isSuccess) {
+            localStorage.setItem("user", student.registrationNumber);
             navigate('/student-portal');
         }
         if (result.isError) {
             console.error('Login failed:', result.error);
             setError('Login failed. Please check your credentials.');
         }
-    }, [result, navigate]);
+    }, [result, navigate, student.registrationNumber]);  // Corrected key
 
     const onPasswordChange = (e) => {
         setStudent({ ...student, password: e.target.value });
@@ -42,7 +43,7 @@ const StudentLogin = () => {
                     className='text-field'
                     placeholder='Registration Number'
                     required
-                    onChange={(e) => setStudent({ ...student, registrationNumber: e.target.value })}
+                    onChange={(e) => setStudent({ ...student, registrationNumber: e.target.value })}  // Corrected key
                 />
                 <input
                     type='password'

@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 // Define instructor schema
 const instructorSchema = new mongoose.Schema({
-    id: {
+    instructorId: {
         type: String,
         required: true,
         unique: true
@@ -30,10 +30,6 @@ const instructorSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    courses: [{
-        courseCode: String,
-        grade: String
-    }],
     department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Department'
