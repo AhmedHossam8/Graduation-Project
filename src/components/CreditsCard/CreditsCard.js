@@ -14,7 +14,7 @@ export default function ActionAreaCard({ name, code, credits, grade, onClick, is
                         {name} {code}
                     </Typography>
                     <Typography variant="h6" color="text.secondary">
-                        Grade: {grade}
+                        Credits: {credits}
                     </Typography>
                     {isCourseSelected && (
                         <svg xmlns="http://www.w3.org/2000/svg" fill="#03fc0f" viewBox="0 0 24 24" width="22px" className='checkmark' strokeWidth="1.5" stroke="currentColor">

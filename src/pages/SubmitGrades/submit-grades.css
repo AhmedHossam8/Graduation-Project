@@ -1,0 +1,29 @@
+.form {
+    justify-content: center;
+    background-color: white;
+    border-radius: 20px;
+}
+
+.grade-field {
+    height: 50px;
+    width: 300px;
+    border-radius: 10px;
+}
+
+.submit-btn {
+    margin-top: 10px;
+    background-color: #003366;
+    width: 300px;
+    height: 45px;
+    color: white;
+    border-radius: 10px;
+}
+
+.form-title {
+    margin-bottom: 30px;
+}
+
+.submit-msg {
+    margin-top: 10px;
+    margin-bottom: 0;
+}

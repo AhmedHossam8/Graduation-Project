@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config(); // Load environment variables
-// const Web3 = require('web3');
+require('dotenv').config();
 
 // Import route files
 const studentRoutes = require('./src/routes/student');
@@ -19,10 +18,10 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(express.json()); // Parse JSON requests
+app.use(express.json());
 app.use(cors());
+
 // Routes
-// Use route files
 app.use('/student', studentRoutes);
 app.use('/instructor', instructorRoutes);
 app.use('/department', departmentRoutes);

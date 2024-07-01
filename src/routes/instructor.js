@@ -103,4 +103,16 @@ router.get('/students/:instructorId', async (req, res) => {
     }
 });
 
+// Submit grade for a student in a course
+router.post('/submit-grade/:studentId', async (req, res) => {
+    const { instructorId, courseId, grade } = req.body;
+    const { studentId } = req.params;
+    try {
+        const updatedStudent = await instructorService.submitGrade(instructorId, courseId, studentId, grade);
+        res.json(updatedStudent);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;

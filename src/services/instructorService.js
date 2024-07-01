@@ -2,7 +2,8 @@ require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Instructor = require('../models/instructor');
-const Course = require('../models/course'); // Import the Course model
+const Course = require('../models/course');
+const Student = require('../models/student');
 
 const instructorService = {
     registerInstructor: async (instructorData) => {
@@ -70,7 +71,37 @@ const instructorService = {
             console.error(`Error fetching students for instructor ID: ${instructorId}`, error);
             throw error;
         }
+    },
+
+    submitGrade: async (instructorId, courseId, studentId, grade) => {
+        try {
+            const instructor = await Instructor.findById(instructorId);
+            if (!instructor) {
+                throw new Error('Instructor not found');
+            }
+
+            const course = await Course.findOne({ _id: courseId, instructor: instructor._id });
+            if (!course) {
+                throw new Error('Course not found or not taught by this instructor');
+            }
+
+            const student = await Student.findOneAndUpdate(
+                { _id: studentId, 'courses.courseCode': course.courseCode },
+                { $set: { 'courses.$.grade': grade } },
+                { new: true }
+            );
+
+            if (!student) {
+                throw new Error('Student not found or not enrolled in this course');
+            }
+
+            return student;
+        } catch (error) {
+            console.error(`Error submitting grade: ${error.message}`);
+            throw error;
+        }
     }
+
 };
 
 module.exports = instructorService;

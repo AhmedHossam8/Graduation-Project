@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetCoursesByInstructorIdQuery } from '../../redux/features/apiSlice';
-import SecCard from '../../components/SecCard/SecCard';
+import SecCard from '../../components/InstructorCard/InstructorCard';
 import './courses-details.css';
 import Navbar from '../../components/SecNavbar/SecNavbar';
 

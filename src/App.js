@@ -14,6 +14,7 @@ import InstructorCourses from './pages/InstructorCourse/InstructorCourse';
 import InstructorCourseDetails from './pages/InstructorCourseDetails/CoursesDetails'; 
 import InstructorWithdraw from './pages/InstructorWithdraw/InstructorWithdraw';
 import StudentsByInstructor from './pages/InstructorViewCourse/InstructorViewCourse';
+import SubmitGrades from './pages/SubmitGrades/SubmitGrades';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
           <Route path="/instructor-courses-details" element={<InstructorCourseDetails />} />
           <Route path="/instructor-withdraw" element={<InstructorWithdraw />} />
           <Route path="/instructor-view-students" element={<StudentsByInstructor />} />
+          <Route path="/submit-grades/:studentId" element={<SubmitGrades />} />
 
           <Route path="/guests" element={<GuestLogin />} />
           

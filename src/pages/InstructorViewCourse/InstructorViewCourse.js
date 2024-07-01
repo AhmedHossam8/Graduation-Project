@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useGetStudentsByInstructorIdQuery } from '../../redux/features/apiSlice';
 import StudentCard from '../../components/StudentCard/StudentCard';
 import Navbar from '../../components/SecNavbar/SecNavbar';
+import { useNavigate } from 'react-router-dom';
 import "./instructor-view-course.css";
 
 const StudentsByInstructor = () => {
@@ -22,6 +23,7 @@ const StudentsByInstructor = () => {
 
     const { data, error, isLoading } = useGetStudentsByInstructorIdQuery(instructorId);
     const [studentsData, setStudentsData] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (data) {
@@ -29,6 +31,16 @@ const StudentsByInstructor = () => {
             setStudentsData(data);
         }
     }, [data]);
+
+    const handleStudentCardClick = (student) => {
+        navigate(`/submit-grades/${student._id}`, {
+            state: {
+                firstName: student.firstName,
+                lastName: student.lastName,
+                registrationNumber: student.registrationNumber,
+            },
+        });
+    };
 
     if (errorMessage) return <div>Error: {errorMessage}</div>;
     if (isLoading) return <div>Loading...</div>;
@@ -42,7 +54,17 @@ const StudentsByInstructor = () => {
                 {Object.entries(studentsData).map(([courseCode, students]) => (
                     <div key={courseCode}>
                         {students.map(student => (
-                            <StudentCard key={student._id} firstName={student.firstName} lastName={student.lastName} registrationNumber={student.registrationNumber} />
+                            <div
+                                key={student._id}
+                                onClick={() => handleStudentCardClick(student)}
+                                style={{ cursor: 'pointer' }}
+                            >
+                                <StudentCard
+                                    firstName={student.firstName}
+                                    lastName={student.lastName}
+                                    registrationNumber={student.registrationNumber}
+                                />
+                            </div>
                         ))}
                     </div>
                 ))}

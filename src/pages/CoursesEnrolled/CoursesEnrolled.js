@@ -36,6 +36,7 @@ const CoursesEnrolled = ({ registrationNumber }) => {
                             name={course.courseTitle}
                             code={course.courseCode}
                             credits={course.courseCredits}
+                            grade={course.grade}
                         />
                     </div>
                 ))}

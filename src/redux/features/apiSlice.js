@@ -65,6 +65,16 @@ export const apiSlice = createApi({
         method: 'GET',
       }),
     }),
+
+    // New endpoint for submitting grades
+    submitGrade: builder.mutation({
+      query: ({ instructorId, courseId, studentId, grade }) => ({
+        url: `/instructor/submit-grade/${studentId}`,
+        method: 'POST',
+        body: { instructorId, courseId, grade },
+      }),
+    }),
+
   }),
 });
 
@@ -76,4 +86,5 @@ export const {
   useGetCoursesEnrolledByStudentQuery,
   useGetCoursesByInstructorIdQuery,
   useGetStudentsByInstructorIdQuery,
+  useSubmitGradeMutation,
 } = apiSlice;

@@ -10,7 +10,7 @@ const WithdrawCourse = '/instructor-withdraw'
 
 const cardData = [
     {
-        title: 'Courses',
+        title: 'View Courses',
         img: CourseImage,
         path: InstructorCourse
     },

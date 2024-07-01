@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useGetCoursesQuery, useEnrollStudentInCourseMutation } from '../../redux/features/apiSlice';
-import ActionAreaCard from '../../components/SecCard/SecCard';
+import ActionAreaCard from '../../components/CreditsCard/CreditsCard';
 import './reg-courses.css';
 import Navbar from '../../components/SecNavbar/SecNavbar';
 

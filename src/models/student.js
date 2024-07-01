@@ -35,7 +35,7 @@ const studentSchema = new mongoose.Schema({
     courseTitle: String,
     Instructor: { type: mongoose.Schema.Types.ObjectId, ref: 'Instructor' },
     courseCredits: Number,
-    grade: String
+    grade: { type: String, default: 'U' }
   }],
   department: {
     type: mongoose.Schema.Types.ObjectId,
